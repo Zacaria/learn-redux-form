@@ -1,7 +1,14 @@
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import React from 'react';
 
-const Lo = () => (<div> ed</div>);
-const Co = () => (<div> Hey <Lo /></div>);
+import App from 'containers/App';
+import configureStore from './store';
 
-ReactDOM.render(<Co />, document.getElementById('main'));
+const store = configureStore();
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('main'));
