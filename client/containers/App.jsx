@@ -1,3 +1,4 @@
+import 'ui-css/current.scss';
 import React, { Component } from 'react';
 
 import OfferForm from './OfferForm';

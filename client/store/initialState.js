@@ -1,10 +1,12 @@
 const initialState = {
   offer: {
     id: '34567897654',
-    name: 'toto'
-  },
-  form: {
-
+    name: 'toto',
+    details: {
+      condition: 'New',
+      quantity: '0',
+      description: ''
+    }
   }
 };
 

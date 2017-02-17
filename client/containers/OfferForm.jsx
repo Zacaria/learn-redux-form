@@ -1,13 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { reduxForm } from 'redux-form';
-import Form from 'react-ui-components//forms/Form';
+import { reduxForm, getFormValues } from 'redux-form';
+import Form from 'react-ui-components/forms/Form';
 import Panel from 'react-ui-components/layout/Panel';
-// import Button from 'react-ui-components/buttons/Button';
+import Button from 'react-ui-components/buttons/Button';
 
 import { getOffer } from '../redux/modules';
-import { edit } from '../redux/modules/offer';
+import { submit } from '../redux/modules/offer';
+
+import Details from '../components/Details';
+
+export const FORM_NAME = 'offerEdit';
 
 class OfferForm extends Component {
   constructor(props) {
@@ -18,8 +22,8 @@ class OfferForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log('Submit !');
-    this.props.edit();
+    const {submit, currentValue} = this.props;
+    submit(currentValue);
   }
 
   renderDescription() {
@@ -33,25 +37,42 @@ class OfferForm extends Component {
   render() {
     return (
       <Form onSubmit={this.handleSubmit}>
+        id: {this.props.initialValues.id}
         {this.renderDescription()}
-        id: {this.props.offer.id}
-        <br/>
-        <button type="submit">Submit</button>
+        <Details />
+        <Button type="submit" bsStyle="primary">Submit</Button>
       </Form>
     );
   }
 }
 
+OfferForm.propTypes = {
+  submit: PropTypes.func,
+  initialValues: PropTypes.shape({
+    id: PropTypes.string
+  }).isRequired,
+  currentValue: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    details: PropTypes.shape({
+      condition: PropTypes.string,
+      quantity: PropTypes.string,
+      description: PropTypes.string
+    })
+  }).isRequired
+};
+
 OfferForm = reduxForm({
-  form: 'offerEdit'
+  form: FORM_NAME
 })(OfferForm);
 
 const mapStateToProps = state => ({
-  offer: getOffer(state)
+  initialValues: getOffer(state),
+  currentValue: getFormValues(FORM_NAME)(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  edit: bindActionCreators(edit, dispatch)
+  submit: bindActionCreators(submit, dispatch)
 });
 
 OfferForm = connect(mapStateToProps, mapDispatchToProps)(OfferForm);
