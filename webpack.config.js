@@ -176,7 +176,6 @@ module.exports = function (env) {
       hints: 'warning',
     },
     externals: {
-      cheerio: 'window',
       'react/addons': 'react',
       'react/lib/ExecutionEnvironment': 'react',
       'react/lib/ReactContext': 'react',
@@ -188,7 +187,7 @@ module.exports = function (env) {
     },
 
     devServer: {
-      contentBase: './client',
+      contentBase: '',
       historyApiFallback: true,
       port: 3000,
       compress: isProd,
