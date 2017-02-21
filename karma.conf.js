@@ -7,8 +7,7 @@ module.exports = function(config) {
     basePath: '',
     frameworks: ['mocha'],
     files: [
-      // 'node_modules/babel-polyfill/dist/polyfill.js',
-      // 'client/**/*.jsx',   //could be /src/**/*.js
+      'node_modules/babel-polyfill/dist/polyfill.js',
       {
         pattern: './client/**/*.spec.js',
         watched: false
@@ -17,13 +16,7 @@ module.exports = function(config) {
         pattern: './client/**/*.spec.jsx',
         watched: false
       }
-      // 'client/**/*.js',   //could be /src/**/*.js
-      // 'client/**/*.spec.js',
-      // 'client/**/*.spec.jsx'
     ],
-    // exclude: [
-    //   '**/node_modules/**'
-    // ],
     preprocessors: {
       // add webpack as preprocessor
       './client/**/*.js': ['webpack', 'sourcemap'],
@@ -39,7 +32,8 @@ module.exports = function(config) {
       'karma-chrome-launcher',
       'karma-phantomjs-launcher',
       'karma-spec-reporter',
-      'karma-webpack'
+      'karma-webpack',
+      'babel-polyfill'
     ],
     babelPreprocessor: {
       options: {
