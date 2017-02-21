@@ -40,12 +40,15 @@
   },
   "dependencies": {
     "babel-runtime": "6.22.0",
+    "lodash.get": "^4.4.2",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "react-redux": "5.0.2",
+    "react-ui-components": "git+ssh://git@github.com/mirakl/react-ui-components.git#1.8.0",
     "redux": "3.6.0",
     "redux-form": "^6.5.0",
     "redux-logger": "^2.8.1",
     "redux-thunk": "2.2.0",
+    "ui-css": "git+ssh://git@github.com/mirakl/ui-css.git#1.7.3"
   }
 }

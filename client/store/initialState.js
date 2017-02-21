@@ -4,8 +4,11 @@ const initialState = {
     name: 'toto',
     details: {
       condition: 'New',
-      quantity: '0',
+      quantity: 12,
       description: ''
+    },
+    channel: {
+      shouldFail: true
     }
   }
 };

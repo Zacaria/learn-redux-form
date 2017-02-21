@@ -1,15 +1,17 @@
+import get from 'lodash.get';
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { reduxForm, getFormValues } from 'redux-form';
+import { reduxForm, getFormValues, getFormAsyncErrors, reset, Field } from 'redux-form';
 import Form from 'react-ui-components/forms/Form';
 import Panel from 'react-ui-components/layout/Panel';
 import Button from 'react-ui-components/buttons/Button';
 
 import { getOffer } from '../redux/modules';
-import { submit } from '../redux/modules/offer';
+import { submit, validate } from '../redux/modules/offer';
 
 import Details from '../components/Details';
+import ChannelPrice from '../components/ChannelPrice';
 
 export const FORM_NAME = 'offerEdit';
 
@@ -22,8 +24,16 @@ class OfferForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const {submit, currentValue} = this.props;
-    submit(currentValue);
+    // try {
+    const {sendForm, currentValue} = this.props;
+    sendForm(currentValue);
+    this.props.resetForm(FORM_NAME);
+    // } catch (err) {
+    //   console.log('caught', err);
+    // }
+
+    // const {sendForm, currentValue} = this.props;
+    // sendForm(currentValue);
   }
 
   renderDescription() {
@@ -39,15 +49,16 @@ class OfferForm extends Component {
       <Form onSubmit={this.handleSubmit}>
         id: {this.props.initialValues.id}
         {this.renderDescription()}
-        <Details />
-        <Button type="submit" bsStyle="primary">Submit</Button>
+        <Details errors={get(this.props, 'errors.details')} />
+        <ChannelPrice />
+        <Button type="submit" bsStyle="primary" disabled={!!(this.props.pristine || this.props.submitting || this.props.asyncValidating)}>Submit</Button>
       </Form>
     );
   }
 }
 
 OfferForm.propTypes = {
-  submit: PropTypes.func,
+  sendForm: PropTypes.func,
   initialValues: PropTypes.shape({
     id: PropTypes.string
   }).isRequired,
@@ -56,23 +67,26 @@ OfferForm.propTypes = {
     name: PropTypes.string,
     details: PropTypes.shape({
       condition: PropTypes.string,
-      quantity: PropTypes.string,
+      quantity: PropTypes.number,
       description: PropTypes.string
     })
   }).isRequired
 };
 
 OfferForm = reduxForm({
-  form: FORM_NAME
+  form: FORM_NAME,
+  asyncValidate: validate
 })(OfferForm);
 
 const mapStateToProps = state => ({
-  initialValues: getOffer(state),
-  currentValue: getFormValues(FORM_NAME)(state)
+  initialValues: Object.assign({}, getOffer(state)),
+  currentValue: getFormValues(FORM_NAME)(state) || {},
+  errors: getFormAsyncErrors(FORM_NAME)(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  submit: bindActionCreators(submit, dispatch)
+  sendForm: bindActionCreators(submit, dispatch),
+  resetForm: bindActionCreators(reset, dispatch)
 });
 
 OfferForm = connect(mapStateToProps, mapDispatchToProps)(OfferForm);

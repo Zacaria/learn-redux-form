@@ -1,3 +1,6 @@
+import { SubmissionError } from 'redux-form';
+import { sleep } from '../../utils';
+
 export const SUBMIT_OFFER_REQUEST = 'SUBMIT_OFFER_REQUEST';
 export const SUBMIT_OFFER_SUCCESS = 'SUBMIT_OFFER_SUCCESS';
 export const SUBMIT_OFFER_ERROR = 'SUBMIT_OFFER_ERROR';
@@ -17,6 +20,7 @@ export function submit(newOffer) {
       type: SUBMIT_OFFER_REQUEST,
       newOffer
     });
+
     setTimeout(() => {
       dispatch({
         type: SUBMIT_OFFER_SUCCESS,
@@ -24,6 +28,25 @@ export function submit(newOffer) {
       });
     }, 1500);
   };
+}
+
+export function validate(values) {
+  console.log('coucou', values);
+  return sleep(1000)
+    .then(() => {
+      if (values.channel.shouldFail) {
+        throw {
+          details: {
+            condition: 'select error',
+            quantity: 'quantity error',
+            description: 'description error'
+          },
+          channel: {
+            shouldFail: 'checkbox error'
+          }
+        };
+      }
+    });
 }
 
 export function getOffer(state) {
