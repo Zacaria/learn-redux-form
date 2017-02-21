@@ -9,17 +9,17 @@ module.exports = function (env) {
   const nodeEnv = env && env.prod ? 'production' : 'development';
   const isProd = nodeEnv === 'production';
 
-  // const extractGlobalCss = new ExtractTextPlugin({
-  //   filename: '[name].[chunkhash].global.css',
-  //   allChunks: true,
-  //   disable: !isProd,
-  // });
-  //
-  // const extractFontAwesome = new ExtractTextPlugin({
-  //   filename: 'font-awesome.[chunkhash].css',
-  //   allChunks: true,
-  //   disable: false,
-  // });
+  const extractGlobalCss = new ExtractTextPlugin({
+    filename: '[name].[chunkhash].global.css',
+    allChunks: true,
+    disable: !isProd,
+  });
+
+  const extractFontAwesome = new ExtractTextPlugin({
+    filename: 'font-awesome.[chunkhash].css',
+    allChunks: true,
+    disable: false,
+  });
 
   const plugins = [
     // new webpack.optimize.CommonsChunkPlugin({
@@ -27,13 +27,13 @@ module.exports = function (env) {
     //   minChunks: Infinity,
     //   filename: 'vendor.bundle.js'
     // }),
-    // new webpack.DefinePlugin({
-    //   'process.env': {NODE_ENV: JSON.stringify(nodeEnv)}
-    // }),
-    // new webpack.NamedModulesPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {NODE_ENV: JSON.stringify(nodeEnv)}
+    }),
+    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    // extractGlobalCss,
-    // extractFontAwesome,
+    extractGlobalCss,
+    extractFontAwesome,
   ];
 
   if (isProd) {
@@ -89,14 +89,14 @@ module.exports = function (env) {
             },
           },
         },
-        // {
-        //   test: /\.css$/,
-        //   exclude: /node_modules/,
-        //   use: [
-        //     'style-loader',
-        //     'css-loader'
-        //   ]
-        // },
+        {
+          test: /\.css$/,
+          exclude: /node_modules/,
+          use: [
+            'style-loader',
+            'css-loader'
+          ]
+        },
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
@@ -104,56 +104,56 @@ module.exports = function (env) {
             'babel-loader'
           ]
         },
-        // {   // Treat font-awesome apart as the font are not loading well when imported with style-loader.
-        //   test: /.scss$/,
-        //   include: /font-awesome/,
-        //   use: extractFontAwesome.extract({
-        //     fallback: 'style-loader',
-        //     use: [
-        //       {
-        //         loader: 'css-loader',
-        //         options: {
-        //           sourceMap: !isProd,
-        //         },
-        //       }, {
-        //         loader: 'sass-loader',
-        //         options: {
-        //           sourceMap: !isProd,
-        //         },
-        //       },
-        //     ],
-        //   }),
-        // },
-        // {
-        //   // Global SASS files
-        //   test: /^((?!local).)*\.scss/,
-        //   exclude: /font-awesome/,
-        //   use: extractGlobalCss.extract({
-        //     fallback: 'style-loader',
-        //     use: [
-        //       {
-        //         loader: 'css-loader',
-        //         options: {
-        //           sourceMap: !isProd,
-        //         },
-        //       }, {
-        //         loader: 'sass-loader',
-        //         options: {
-        //           sourceMap: !isProd,
-        //         },
-        //       },
-        //     ],
-        //   }),
-        // },
-        // {
-        //   test: /\.(ttf|eot|svg|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        //   use: {
-        //     loader: 'file-loader',
-        //     options: {
-        //       name: '[name].[ext]'
-        //     },
-        //   },
-        // },
+        {   // Treat font-awesome apart as the font are not loading well when imported with style-loader.
+          test: /.scss$/,
+          include: /font-awesome/,
+          use: extractFontAwesome.extract({
+            fallback: 'style-loader',
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  sourceMap: !isProd,
+                },
+              }, {
+                loader: 'sass-loader',
+                options: {
+                  sourceMap: !isProd,
+                },
+              },
+            ],
+          }),
+        },
+        {
+          // Global SASS files
+          test: /^((?!local).)*\.scss/,
+          exclude: /font-awesome/,
+          use: extractGlobalCss.extract({
+            fallback: 'style-loader',
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  sourceMap: !isProd,
+                },
+              }, {
+                loader: 'sass-loader',
+                options: {
+                  sourceMap: !isProd,
+                },
+              },
+            ],
+          }),
+        },
+        {
+          test: /\.(ttf|eot|svg|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+          use: {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]'
+            },
+          },
+        },
       ],
     },
     resolve: {

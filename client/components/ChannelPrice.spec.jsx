@@ -13,6 +13,5 @@ describe('<ChannelPrice />', () => {
   it('should render correctly', () => {
     const wrapper = shallow(<ChannelPrice />);
     expect(wrapper.find(Panel)).to.have.length(1);
-    expect(true).to.be.eql(true);
   });
 });
