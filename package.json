@@ -1,6 +1,6 @@
 {
   "name": "learn-redux-form",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Personal repo aiming to learn and try things with [redux-form](https://github.com/erikras/redux-form)",
   "main": "client/index.js",
   "scripts": {
